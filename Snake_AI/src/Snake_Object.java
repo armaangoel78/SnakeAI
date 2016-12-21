@@ -1,64 +1,49 @@
 
 public class Snake_Object {
-	private int size = 0;
-	private Snake_Node[] nodes = new Snake_Node[size];
+	private int length = 0;
+	private Snake_Node[] nodes = new Snake_Node[length];
 	private int[] vel;
 	private boolean crash = false;
 	private int w, h;
 	
 	public Snake_Object() {}
-	public Snake_Object(int[] vel, int x, int y, int w, int h) {
+	public Snake_Object(int[] vel, int w, int h) {
 		this.vel = vel;
 		this.w = w;
 		this.h = h;
 		
-		add(x, y);
-		update();
+		add(w, h);
+		//update();
 	}
  	
-	public void add(int x, int y) {
-		Snake_Node[] temp = new Snake_Node[size+1];
+	private void add(int x, int y) {
+		Snake_Node[] temp = new Snake_Node[length+1];
 		
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < length; i++) {
 			temp[i] = nodes [i];
 		}
 		nodes = temp;
-		nodes[size] = new Snake_Node();
+		nodes[length] = new Snake_Node();
 			
-		nodes[size].setCords(x, y);
-		size++;
+		nodes[length].setCords(x, y);
+		length++;
 	}
 	
 	public void add() {
-		Snake_Node[] temp = new Snake_Node[size+1];
-		for (int i = 0; i < size; i++) {
+		Snake_Node[] temp = new Snake_Node[length+1];
+		for (int i = 0; i < length; i++) {
 			temp[i] = nodes [i];
 		}
 		nodes = temp;
-		nodes[size] = new Snake_Node();
+		nodes[length] = new Snake_Node();
 	
 		int x, y;
-		if (vel[0] > 0) {
-			x = nodes[size-1].getLastX();
-			y = nodes[size-1].getLastY();
-		} else if (vel[0] < 0) {
-			x = nodes[size-1].getLastX();
-			y = nodes[size-1].getLastY();
-
-		} else if (vel[1] > 0) {
-			x = nodes[size-1].getLastX();
-			y = nodes[size-1].getLastY();
-
-		} else if (vel[1] < 0) {
-			x = nodes[size-1].getLastX();
-			y = nodes[size-1].getLastY();
-		} else {
-			x = 0;
-			y = 0;
-		}
 		
-		nodes[size].setCords(x, y);
-		size++;
+		x = nodes[length-1].getLastX();
+		y = nodes[length-1].getLastY();
+		
+		nodes[length].setCords(x, y);
+		length++;
 	}
 	
 	public void update () {
@@ -66,9 +51,9 @@ public class Snake_Object {
 			y = nodes[0].getY() + vel[1]; 
 		
 		nodes[0].setCords(x, y);
-		if (x <= 0 || x-20 >= w || y <= 0 || y-20 >= h) crash = true;
+		if (x < 0 || x > w || y < 0 || y > h) crash = true;
 		
-		for (int i = 1; i < size; i++) {
+		for (int i = 1; i < length; i++) {
 			x = nodes[i-1].getLastX();
 			y = nodes[i-1].getLastY();
 			
@@ -78,7 +63,7 @@ public class Snake_Object {
 	}
 	
 	public int getSize() {
-		return size;
+		return length;
 	}
 	
 	public int getX (int node) {

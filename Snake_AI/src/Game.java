@@ -1,33 +1,52 @@
-import java.applet.Applet;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-
-@SuppressWarnings("serial")
-public class Game extends Applet{
-	private int[] vel = {0, -20};
-	private final int w = 400, h = 400;
-	private Snake_Object snake = new Snake_Object(vel, w/2, h/2, w, h);
+public class Game {
+	private Snake_Object snake;
+	private Apple apple;
+	private int[][] board;
+	private boolean crashed = false;
 	
-	private Painter p = new Painter(w, h, snake);
-	private Runner r = new Runner(this, snake, vel);
-	private Thread t = new Thread(r);
-	private KeyInput l = new KeyInput(vel, snake, t);
-
-
-	public void init() {
-		this.resize(w, h);
-		this.addKeyListener(l);
+	public Game (int[] vel, int w, int h) {
+		snake = new Snake_Object(vel, w, h);
+		apple = new Apple(w, h, snake);
+		board = new int[w][h];
 	}
 	
-	public void paint(Graphics g) {
-		p.paint(g);
+	public int getSnakeX() {
+		return snake.getX(0);
+	}
+	
+	public int getSnakeY() {
+		return snake.getY(0);
+	}
+	
+	public int getScore() {
+		return apple.getScore();
+	}
+	
+	public int[][] getBoard() {
+		return board;
+	}
+	
+	public void update() {
+		snake.update();
+		apple.update();
 		
-		if (snake.getCrashed()) {
-			g.setColor(Color.WHITE);
-			g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 150));
-			g.drawString("DIED", w/2-185, h/2);
-			t.stop();
+		for (int i = 0; i < board.length; i++) {
+			for (int x = 0; x < board[i].length; x++) {
+				int value = 0;
+				
+				if (apple.getX() == i && apple.getY() == x) value = 2;
+				for (int y = 0; y < snake.getSize(); y++) {
+					if (snake.getX(y) == i && snake.getY(y) == x) value = 1;
+				}
+				
+				board[i][x] = value;
+			}
 		}
+		
+		crashed = snake.getCrashed();
+	}
+	
+	public boolean getCrashed() {
+		return crashed;
 	}
 }

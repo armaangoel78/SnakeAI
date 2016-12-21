@@ -5,33 +5,29 @@ import java.util.Random;
 
 public class Painter {
 	private Random r = new Random();
-	private int w, h;
-	private Snake_Object snake;
-	private Apple apple;
+	private int[][] board;
+	private int pixelSize;
+		
+	private Graphics g;
 	
-	public Painter (int w, int h, Snake_Object snake) {
-		this.w = w;
-		this.h = h;
-		this.snake = snake;
-		this.apple = new Apple(w, h, snake);
+	public Painter (int[][] board, int pixelSize, Graphics g) {
+		this.board = board;
+		this.pixelSize = pixelSize;
+		this.g = g;
 	}
 	
-	public void paint (Graphics g) {
-		g.setColor(Color.black);
-		g.fillRect(0, 0, w, h);
-		
-		g.setColor(Color.green);
-		for (int i = 0; i < snake.getSize(); i++) {
-			g.fillRect(snake.getX(i), snake.getY(i), 20, 20);
+	public void paint() {
+		for (int i = 0; i < board.length; i++) {
+			for (int x = 0; x < board[i].length; x++) {
+				Color c;
+				if (board[i][x] == 0) c = Color.black;
+				else if (board[i][x] == 2) c = Color.MAGENTA;
+				else c = Color.green;
+				
+				g.setColor(c);
+				g.fillRect(i*pixelSize, x*pixelSize, pixelSize, pixelSize);
+			}
 		}
-		
-		apple.update();
-		g.setColor(Color.magenta);
-		g.fillRect(apple.getX(), apple.getY(), 20, 20);
-		
-		g.setColor(Color.WHITE);
-		g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 50));
-		g.drawString(Integer.toString(apple.getScore()), w/2-25, 50);
 	}
 	
 	public Color randomColor() {

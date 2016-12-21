@@ -35,9 +35,7 @@ public class Apple {
 	}
 	
 	public void rand() {
-		x = r.nextInt(w-60) + 20;
-		y = r.nextInt(h-60) + 20;
-		x = CordinateNormalizer.norm(x, 20);
-		y = CordinateNormalizer.norm(y, 20);
+		x = r.nextInt(w);
+		y = r.nextInt(h);
 	}
 }
