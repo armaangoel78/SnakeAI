@@ -12,7 +12,7 @@ public class Snake_Object {
 		this.w = w;
 		this.h = h;
 		
-		add(w, h);
+		add(w/2, h/2);
 		//update();
 	}
  	

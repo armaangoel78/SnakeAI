@@ -2,7 +2,7 @@
 public class AI {
 	private int[][] board;
 	
-	private Synapse sOne[][][][], sTwo[][][][], sThree[][][][];
+	public Synapse sOne[][][][], sTwo[][][][], sThree[][][][];
 	private Neuron nOne[][], nTwo[][], nThree[][]; 
 	private final int layerTwo = 20, layerThree = 10, layerFour = 2;
 	
@@ -20,7 +20,6 @@ public class AI {
 		
 		sThree = new Synapse[layerFour][layerFour][layerThree][layerThree];
 		nThree = new Neuron[layerFour][layerFour];
-		
 		
 		for (int a = 0; a < sOne.length; a++) {
 			for (int b = 0; b < sOne[a].length; b++) {
@@ -69,7 +68,6 @@ public class AI {
 				nThree[a][b] = new Neuron();
 			}
 		}
-
 	}
 	
 	public void update() {
