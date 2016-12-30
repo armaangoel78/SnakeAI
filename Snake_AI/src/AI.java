@@ -110,7 +110,6 @@ public class AI {
 		
 		double max = -1;
 		int r = 0, c = 0;
-		
 		for (int i = 0; i < layerFourOut.length; i++) {
 			for (int x = 0; x < layerFourOut[i].length; x++) {
 				if (layerFourOut[i][x] > max) {
@@ -124,16 +123,13 @@ public class AI {
 		if (r == 0 && c == 0) {
 			vel[0] = 0;
 			vel[1] = -1;
-		}
-		if (r == 0 && c == 1) {
+		} else if (r == 0 && c == 1) {
 			vel[0] = 0;
 			vel[1] = 1;
-		}
-		if (r == 1 && c == 0) {
+		} else if (r == 1 && c == 0) {
 			vel[0] = -1;
 			vel[1] = 0;
-		}
-		if (r == 1 && c == 1) {
+		} else if (r == 1 && c == 1) {
 			vel[0] = 1;
 			vel[1] = 0;
 		}

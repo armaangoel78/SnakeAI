@@ -5,21 +5,26 @@ public class Runner implements Runnable {
 	private Game game;
 	private AI player;
 	private int fitness = 0;
-	private boolean dead = false;
 	private Random r = new Random();
 	private int num;
+	private double mutationRate;
 	
-	public Runner(int w, int h, Runner one, Runner two, int num) {
+	public Runner(int w, int h, Runner one, Runner two, int num, double mutationRate) {
 		this.num = num;
+		this.mutationRate = mutationRate;
+		
 		game = new Game(vel, w, h);
 		player = new AI(game.getBoard(), vel);
+		
 		breed(one, two);
 	}
 	
-	public Runner(int w, int h, int num) {
+	public Runner(int w, int h, int num, double mutationRate) {
+		this.num = num;
+		this.mutationRate = mutationRate;
+
 		game = new Game(vel, w, h);
 		player = new AI(game.getBoard(), vel);
-		this.num = num;
 	}
 	
 	
@@ -31,14 +36,7 @@ public class Runner implements Runnable {
 			for (int b = 0; b < sOne1[a].length; b++) {
 				for (int c = 0; c < sOne1[a][b].length; c++) {
 					for (int d = 0; d < sOne1[a][b][c].length; d++) {
-						String wOne = Long.toBinaryString(Double.doubleToRawLongBits(sOne1[a][b][c][d].getWeight()));
-						String wTwo = Long.toBinaryString(Double.doubleToRawLongBits(sOne2[a][b][c][d].getWeight()));
-						
-						int position = r.nextInt(wOne.length());
-						
-						String newWeight = wOne.substring(0, position) + wTwo.substring(position);
-						Double weight = Double.longBitsToDouble(Long.parseLong(newWeight, 2));
-						player.sOne[a][b][c][d].setWeight(weight);
+						player.sOne[a][b][c][d].setWeight(splice(sOne1[a][b][c][d].getWeight(), sOne2[a][b][c][d].getWeight()));
 					}
 				}
 			}
@@ -50,14 +48,7 @@ public class Runner implements Runnable {
 			for (int b = 0; b < sTwo1[a].length; b++) {
 				for (int c = 0; c < sTwo1[a][b].length; c++) {
 					for (int d = 0; d < sTwo1[a][b][c].length; d++) {
-						String wOne = Long.toBinaryString(Double.doubleToRawLongBits(sTwo1[a][b][c][d].getWeight()));
-						String wTwo = Long.toBinaryString(Double.doubleToRawLongBits(sTwo2[a][b][c][d].getWeight()));
-						
-						int position = r.nextInt(wOne.length());
-						
-						String newWeight = wOne.substring(0, position) + wTwo.substring(position);
-						Double weight = Double.longBitsToDouble(Long.parseLong(newWeight, 2));
-						player.sTwo[a][b][c][d].setWeight(weight);
+						player.sTwo[a][b][c][d].setWeight(splice(sTwo1[a][b][c][d].getWeight(), sTwo2[a][b][c][d].getWeight()));
 					}
 				}
 			}
@@ -69,18 +60,32 @@ public class Runner implements Runnable {
 			for (int b = 0; b < sThree1[a].length; b++) {
 				for (int c = 0; c < sThree1[a][b].length; c++) {
 					for (int d = 0; d < sThree1[a][b][c].length; d++) {
-						String wOne = Long.toBinaryString(Double.doubleToRawLongBits(sThree1[a][b][c][d].getWeight()));
-						String wTwo = Long.toBinaryString(Double.doubleToRawLongBits(sThree2[a][b][c][d].getWeight()));
-						
-						int position = r.nextInt(wOne.length());
-						
-						String newWeight = wOne.substring(0, position) + wTwo.substring(position);
-						Double weight = Double.longBitsToDouble(Long.parseLong(newWeight, 2));
-						player.sThree[a][b][c][d].setWeight(weight);
+						player.sThree[a][b][c][d].setWeight(splice(sThree1[a][b][c][d].getWeight(), sThree2[a][b][c][d].getWeight()));
 					}
 				}
 			}
 		}
+	}
+	
+	public double splice(double w1, double w2) {
+		String wOne = Long.toBinaryString(Double.doubleToRawLongBits(w1));
+		String wTwo = Long.toBinaryString(Double.doubleToRawLongBits(w2));
+		
+		int position = r.nextInt(Math.min(wOne.length(), wTwo.length()));
+		
+		if (position < 0) System.out.println("jk" + position);
+		
+		String newWeight = wOne.substring(0, position) + wTwo.substring(position);
+		
+		if (mutationRate * newWeight.length() >= Math.random()) {
+			int index = r.nextInt(newWeight.length());
+			String bit = newWeight.substring(index, index+1);
+			bit = (bit.equals("1") ? "0" : "1");
+			newWeight = newWeight.substring(0, index) + bit + newWeight.substring(index+1);
+		}
+		
+		double weight = Double.longBitsToDouble(Long.parseLong(newWeight, 2));
+		return weight;
 	}
 	
 	@Override
@@ -88,18 +93,10 @@ public class Runner implements Runnable {
 		while (game.getCrashed() == false) {
 			game.update();
 			player.update();
-			fitness++;
-		}		
-		fitness += game.getScore() * 10;		
-		dead = true;
-	}
-	
-	public boolean getDead() {
-		return dead;
-	}
-	
-	public int getFitness() {
-		return fitness;
+		}	
+		
+		fitness = game.getScore()+1;
+		Main.setFitness(num, fitness);
 	}
 	
 	public AI getAi() {
