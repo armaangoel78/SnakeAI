@@ -4,7 +4,7 @@ public class AI {
 	
 	public Synapse sOne[][][][], sTwo[][][][], sThree[][][][];
 	private Neuron nOne[][], nTwo[][], nThree[][]; 
-	private final int layerTwo = 20, layerThree = 10, layerFour = 2;
+	private final int layerTwo = 10, layerThree = 5, layerFour = 2;
 	
 	private int[] vel;
 	

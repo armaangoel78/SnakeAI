@@ -34,7 +34,7 @@ public class Game {
 			for (int x = 0; x < board[i].length; x++) {
 				int value = 0;
 				
-				if (apple.getX() == i && apple.getY() == x) value = 2;
+				if (apple.getX() == i && apple.getY() == x) value = 10;
 				for (int y = 0; y < snake.getSize(); y++) {
 					if (snake.getX(y) == i && snake.getY(y) == x) value = 1;
 				}

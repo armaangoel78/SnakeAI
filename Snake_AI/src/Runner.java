@@ -8,10 +8,12 @@ public class Runner implements Runnable {
 	private Random r = new Random();
 	private int num;
 	private double mutationRate;
+	private double crossoverRate;
 	
-	public Runner(int w, int h, Runner one, Runner two, int num, double mutationRate) {
+	public Runner(int w, int h, Runner one, Runner two, int num, double mutationRate, double crossoverRate) {
 		this.num = num;
 		this.mutationRate = mutationRate;
+		this.crossoverRate = crossoverRate;
 		
 		game = new Game(vel, w, h);
 		player = new AI(game.getBoard(), vel);
@@ -19,9 +21,10 @@ public class Runner implements Runnable {
 		breed(one, two);
 	}
 	
-	public Runner(int w, int h, int num, double mutationRate) {
+	public Runner(int w, int h, int num, double mutationRate, double crossoverRate) {
 		this.num = num;
 		this.mutationRate = mutationRate;
+		this.crossoverRate = crossoverRate;
 
 		game = new Game(vel, w, h);
 		player = new AI(game.getBoard(), vel);
@@ -36,7 +39,8 @@ public class Runner implements Runnable {
 			for (int b = 0; b < sOne1[a].length; b++) {
 				for (int c = 0; c < sOne1[a][b].length; c++) {
 					for (int d = 0; d < sOne1[a][b][c].length; d++) {
-						player.sOne[a][b][c][d].setWeight(splice(sOne1[a][b][c][d].getWeight(), sOne2[a][b][c][d].getWeight()));
+						if (Math.random() <= crossoverRate) player.sOne[a][b][c][d].setWeight(splice(sOne1[a][b][c][d].getWeight(), sOne2[a][b][c][d].getWeight()));
+						else player.sOne[a][b][c][d].randWeight();
 					}
 				}
 			}
@@ -48,7 +52,8 @@ public class Runner implements Runnable {
 			for (int b = 0; b < sTwo1[a].length; b++) {
 				for (int c = 0; c < sTwo1[a][b].length; c++) {
 					for (int d = 0; d < sTwo1[a][b][c].length; d++) {
-						player.sTwo[a][b][c][d].setWeight(splice(sTwo1[a][b][c][d].getWeight(), sTwo2[a][b][c][d].getWeight()));
+						if (Math.random() <= crossoverRate) player.sTwo[a][b][c][d].setWeight(splice(sTwo1[a][b][c][d].getWeight(), sTwo2[a][b][c][d].getWeight()));
+						else player.sTwo[a][b][c][d].randWeight();
 					}
 				}
 			}
@@ -60,7 +65,8 @@ public class Runner implements Runnable {
 			for (int b = 0; b < sThree1[a].length; b++) {
 				for (int c = 0; c < sThree1[a][b].length; c++) {
 					for (int d = 0; d < sThree1[a][b][c].length; d++) {
-						player.sThree[a][b][c][d].setWeight(splice(sThree1[a][b][c][d].getWeight(), sThree2[a][b][c][d].getWeight()));
+						if (Math.random() <= crossoverRate) player.sThree[a][b][c][d].setWeight(splice(sThree1[a][b][c][d].getWeight(), sThree2[a][b][c][d].getWeight()));
+						else player.sThree[a][b][c][d].randWeight();
 					}
 				}
 			}
