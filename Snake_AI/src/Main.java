@@ -1,7 +1,7 @@
 import java.util.Random;
 
 public class Main {
-	private static final int w = 20, h = 20, num_ai = 1000;
+	private static final int w = 20, h = 20, num_ai = 100;
 	private static final double mutationRate = .001, crossoverRate = .7;
 	private static int[] fitnesses  = new int[num_ai];
 
@@ -38,7 +38,7 @@ public class Main {
 				threads[i] = new Thread(runners[i]);
 				threads[i].start();
 			}
-		}
+		} 
  	}
 	
 	public static int[] setWheel () {
@@ -65,6 +65,7 @@ public class Main {
 	}
 	
 	public static int getMember(int[] wheel) {
+		System.out.print("");
 		return wheel[r.nextInt(wheel.length)];
 	}
 	
@@ -87,7 +88,6 @@ public class Main {
 			}
 		}
 		
-		System.out.println(oneVal);
 		return new int[] {one, two};
 	}
 	

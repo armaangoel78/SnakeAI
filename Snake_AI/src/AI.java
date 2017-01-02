@@ -1,14 +1,11 @@
 
-public class AI {
-	private int[][] input;
-	
+public class AI {	
 	public Synapse sOne[][][][], sTwo[][][][];
 	private Neuron nOne[][], nTwo[][];
-	private final int layerTwo = 4, layerThree = 2;
+	private final int layerTwo = 6, layerThree = 2;
 	private int[] vel;
 	
 	public AI(int[][] input, int[] vel) {
-		this.input = input;
 		this.vel = vel;
 		
 		sOne = new Synapse[layerTwo][layerTwo][input.length][input[0].length];
@@ -51,7 +48,7 @@ public class AI {
 		
 	}
 	
-	public void update() {
+	public void update(int[][] input) {
 		double[][] layerTwoOut = new double[layerTwo][layerTwo];
 		double[][] layerThreeOut = new double[layerThree][layerThree];
 		

@@ -35,7 +35,6 @@ public class Game {
 							{x, y}, 
 							{apple.getX(), apple.getY()}, 
 							{vel[0], vel[1]},
-							{board[x+1][y], board[x-1][y], board[x][y+1], board[x][y-1]}
 						   };
 	}
 	

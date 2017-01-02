@@ -23,10 +23,10 @@ public class Runner implements Runnable {
 		int fitness = 0;
 		while (game.getCrashed() == false) {
 			game.update();
-			player.update();
+			player.update(game.getInputForAI());
 		}	
 		
-		fitness += game.getScore()+1;
+		fitness = game.getScore() + 1;
 		Main.setFitness(num, fitness);
 	}
 	
