@@ -49,7 +49,7 @@ public class Snake_Object {
 	public void update () {
 		int x = nodes[0].getX() + vel[0], 
 			y = nodes[0].getY() + vel[1]; 
-		
+				
 		nodes[0].setCords(x, y);
 		if (x < 0 || x > w || y < 0 || y > h) crash = true;
 		

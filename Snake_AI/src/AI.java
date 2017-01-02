@@ -1,25 +1,21 @@
 
 public class AI {
-	private int[][] board;
+	private int[][] input;
 	
-	public Synapse sOne[][][][], sTwo[][][][], sThree[][][][];
-	private Neuron nOne[][], nTwo[][], nThree[][]; 
-	private final int layerTwo = 10, layerThree = 5, layerFour = 2;
-	
+	public Synapse sOne[][][][], sTwo[][][][];
+	private Neuron nOne[][], nTwo[][];
+	private final int layerTwo = 4, layerThree = 2;
 	private int[] vel;
 	
-	public AI(int[][] board, int[] vel) {
-		this.board = board;
+	public AI(int[][] input, int[] vel) {
+		this.input = input;
 		this.vel = vel;
 		
-		sOne = new Synapse[layerTwo][layerTwo][board.length][board[0].length];
+		sOne = new Synapse[layerTwo][layerTwo][input.length][input[0].length];
 		nOne = new Neuron[layerTwo][layerTwo];
 		
 		sTwo = new Synapse[layerThree][layerThree][layerTwo][layerTwo];
 		nTwo = new Neuron[layerThree][layerThree];
-		
-		sThree = new Synapse[layerFour][layerFour][layerThree][layerThree];
-		nThree = new Neuron[layerFour][layerFour];
 		
 		for (int a = 0; a < sOne.length; a++) {
 			for (int b = 0; b < sOne[a].length; b++) {
@@ -41,16 +37,6 @@ public class AI {
 			}
 		}
 		
-		for (int a = 0; a < sThree.length; a++) {
-			for (int b = 0; b < sThree[a].length; b++) {
-				for (int c = 0; c < sThree[a][b].length; c++) {
-					for (int d = 0; d < sThree[a][b][c].length; d++) {
-						sThree[a][b][c][d] = new Synapse();
-					}
-				}
-			}
-		}
-		
 		for (int a = 0; a < nOne.length; a++) {
 			for (int b = 0; b < nOne[a].length; b++) {
 				nOne[a][b] = new Neuron();
@@ -63,26 +49,20 @@ public class AI {
 			}
 		}
 		
-		for (int a = 0; a < nThree.length; a++) {
-			for (int b = 0; b < nThree[a].length; b++) {
-				nThree[a][b] = new Neuron();
-			}
-		}
 	}
 	
 	public void update() {
 		double[][] layerTwoOut = new double[layerTwo][layerTwo];
 		double[][] layerThreeOut = new double[layerThree][layerThree];
-		double[][] layerFourOut = new double[layerFour][layerFour];
 		
 		for (int a = 0; a < sOne.length; a++) {
 			for (int b = 0; b < sOne[a].length; b++) {
 				for (int c = 0; c < sOne[a][b].length; c++) {
 					for (int d = 0; d < sOne[a][b][c].length; d++) {
-						sOne[a][b][c][d].getOutput((double) board[c][d]);
+						sOne[a][b][c][d].getOutput((double) input[c][d]);
 					}
 				}
-				layerTwoOut[a][b] = nOne[a][b].output(sOne[a][b]);
+				layerTwoOut[a][b] = nOne[a][b].output(sOne[a][b], true);
 			}
 		}
 		
@@ -93,29 +73,18 @@ public class AI {
 						sTwo[a][b][c][d].getOutput(layerTwoOut[c][d]);
 					}
 				}
-				layerThreeOut[a][b] = nTwo[a][b].output(sTwo[a][b]);
-			}
-		}
-		
-		for (int a = 0; a < sThree.length; a++) {
-			for (int b = 0; b < sThree[a].length; b++) {
-				for (int c = 0; c < sThree[a][b].length; c++) {
-					for (int d = 0; d < sThree[a][b][c].length; d++) {
-						sThree[a][b][c][d].getOutput(layerThreeOut[c][d]);
-					}
-				}
-				layerFourOut[a][b] = nThree[a][b].output(sThree[a][b]);
+				layerThreeOut[a][b] = nTwo[a][b].output(sTwo[a][b], false);
 			}
 		}
 		
 		double max = -1;
 		int r = 0, c = 0;
-		for (int i = 0; i < layerFourOut.length; i++) {
-			for (int x = 0; x < layerFourOut[i].length; x++) {
-				if (layerFourOut[i][x] > max) {
+		for (int i = 0; i < layerThreeOut.length; i++) {
+			for (int x = 0; x < layerThreeOut[i].length; x++) {
+				if (layerThreeOut[i][x] > max) {
 					r = i;
 					c = x;
-					max = layerFourOut[i][x];
+					max = layerThreeOut[i][x];
 				}
 			}
 		}
