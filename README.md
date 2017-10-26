@@ -1,2 +1,2 @@
 # Snake_AI
-AI player for snake game
+An unfinished project designed to create an AI to beat the snake game. 
